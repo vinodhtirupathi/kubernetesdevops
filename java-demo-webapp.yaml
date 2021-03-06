@@ -1,0 +1,36 @@
+---
+#creating deployment application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javademo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: javademo
+  template:
+    metadata:
+      labels:
+        app: javademo
+    spec:
+      containers:
+      - image: vinodh14/devops-docker-demo-01
+        name: javademo
+        ports:
+        - containerPort: 8080
+---
+#exposing application using external service
+apiVersion: v1
+kind: Service
+metadata:
+  name: javademo
+spec:
+  type: NodePort
+  ports:
+    - nodePort: 31317
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: javademo
